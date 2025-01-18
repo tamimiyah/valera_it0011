@@ -1,6 +1,6 @@
-print("****************************************")
-print("\t  PERSONAL INFORMATION")
-print("****************************************")
+print("********************************************")
+print("\t   PERSONAL INFORMATION")
+print("********************************************")
 
 firstName= input(" Enter First Name: ")
 middleName= input("Enter Middle Name: ")
