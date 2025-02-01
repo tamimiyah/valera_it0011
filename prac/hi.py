@@ -1,4 +1,3 @@
-__name__ = 'hi'
+name = 'Gale'
 
-def hi():
-    print('hi')
+print(f'Hello, {name}!')
