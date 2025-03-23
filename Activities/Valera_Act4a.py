@@ -12,6 +12,22 @@ def clearScreen():
 def calcGrade(studentClassStanding, studentExamScore):
     return (0.6 * studentClassStanding) + (0.4 * studentExamScore)
 
+def continuePrompt(promptInsert):
+    while True:
+        choice = input("Do you want to " + promptInsert + "? (y/n): ").strip().lower()
+        if choice == 'y':
+            if promptInsert.strip().lower() == "open another file":
+                openFile()
+            elif promptInsert.strip().lower() == "save new file":
+                saveFile()
+            elif promptInsert.strip().lower() == "add new record":
+                addRecord()
+        elif choice == 'n':
+            print("Returning to the main menu...")
+            break
+        else:
+            print("Invalid input. Please enter 'y' or 'n'.")
+
 def main_menu():
     clearScreen()
     while True:
@@ -67,21 +83,23 @@ def openFile():
         print(f"File '{fileName}' loaded successfully!")
     else:
         print(f"File '{fileName}' does not exist.")
-    while True:
-        choice = input("Do you want to open another file? (y/n): ").strip().lower()
-        if choice == 'y':
-            openFile()
-            break
-        elif choice == 'n':
-            print("Returning to the main menu...")
-            break
-        else:
-            print("Invalid input. Please enter 'y' or 'n'.")
+
+    continuePrompt("Open Another File")
             
 def saveFile():
     clearScreen()
-    fileName = input("Enter the Filename to save: ")
-            
+    while True:
+        fileName = input("Enter the Filename to save: ")
+        if not os.path.exists(fileName):
+            with open(fileName, "w") as file:
+                for record in student_records:
+                    studentId, (studentLastName, studentFirstName), studentClassStanding, studentExamScore = record
+                    file.write(f"{studentId},{studentLastName},{studentFirstName},{studentClassStanding},{studentExamScore}\n")
+            print(f"Records saved successfully to '{fileName}'!")
+            break
+        else:
+            print(f"File '{fileName}' already exists. Please enter a different file name.")
+    continuePrompt("Save New File")        
     
 def addRecord():
     clearScreen()
@@ -127,16 +145,7 @@ def addRecord():
     student_records.append((studentId, (studentLastName, studentFirstName), studentClassStanding, studentExamScore))
     print("Student Record Added Successfully!")
     
-    while True:
-        choice = input("Do You Want to Add Record? (y/n)").strip().lower()
-        if choice == 'y':
-            addRecord()
-            break
-        elif choice == 'n':
-            print("Returning to the main menu...")
-            break
-        else:
-            print("Invalid input. Please enter 'y' or 'n'.")
+    continuePrompt("Add Another Record")
     
 if __name__ == "__main__":
     main_menu()
