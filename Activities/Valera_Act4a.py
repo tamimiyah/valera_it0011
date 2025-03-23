@@ -4,7 +4,7 @@
 import os
 
 # Global variables for student records
-studentRecords = ()
+studentRecords = []
 
 # Global variable to store the current file name
 currentFile = ""
