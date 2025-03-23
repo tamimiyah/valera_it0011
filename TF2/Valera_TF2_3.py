@@ -39,6 +39,8 @@ while True:
 student = f"Full Name: {lName.capitalize()}, {fName.capitalize()}  Age: {age}  Contact #: {contactNum}  Course: {course.capitalize()}"
 
 # Opens a file named "students.txt" in append mode and writes the formatted information to the file.
-with open("students.txt", "a+") as file:
+file_path = os.path.join(os.path.dirname(__file__), "students.txt")
+with open(file_path, "a+") as file:
     file.write(student + "\n")
-    print(f"Student Information has been saved successfully to 'students.txt'!")
+    # Displays a confirmation message indicating that the information has been saved.
+    print(f"Student Information has been saved successfully to '{file_path}'!")
