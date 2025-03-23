@@ -1,0 +1,27 @@
+1. How does the format() function help in combining variables with text in Python? Can you provide a simple example?
+    format() function helps in making the code easir to code and read. 
+    For example:
+    print(f"\nFULL NAME: {lname.upper()}, {fname.upper()}")
+    This format helped in creating a contatenation of 2 difference variables.
+
+2. Explain the basic difference between opening a file in 'read' mode ('r') and 'write' mode ('w') in Python. When would you use each
+    'r' or Read Mode is only applicable in viewing a file only. For example, in my activity I want to open the contents of students.txt  and I did that using read mode.
+    'w' or Write mode is only applicable for writing a content in the file. For example, I wanted to add a new file with the input values that the user entered -- write mode is the right mode to use for that.
+
+3. Describe what string slicing is in Python. Provide a basic example of extracting a substring from a larger string.
+    Slicing is used to extract a specific word, or sentence in a string or getting the characters you only need for the code.
+    For example:
+    str = "Blk 5 Cornelia Street Brgy. Red, Swift City"
+
+    In that string, I only want to include the city in the other part of the program so I can use slicing to just do that.
+    city = [-10:]
+
+4. When saving information to a file in Python, what is the purpose of using the 'a' mode instead of the 'w' mode? Provide a straightforward example.
+    'a' or append mode is used to add a new content to an existing file without overwriting the current contents.
+    'w' or write mode can only create or write a new line. If in any instances that you write a new content into an existing file, its current contents will be overwritten.
+
+    with open("example.txt", "a") as file:
+    file.write("This is a new line.\n")
+
+    with open("example.txt", "w") as file:
+    file.write("This will overwrite the file.\n")
