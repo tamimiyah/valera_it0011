@@ -34,6 +34,8 @@ def continuePrompt(promptInsert):
                 addRecord()
             elif promptInsert.strip().lower() == "edit another record":
                 editRecord()
+            elif promptInsert.strip().lower() == "delete another record":
+                deleteRecord()
         elif choice == 'n':
             print("Returning to the main menu...")
             break
