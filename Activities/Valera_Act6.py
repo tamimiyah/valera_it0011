@@ -1,3 +1,6 @@
+#Author: Valera, Tamiyah Gale
+#Date: 25/03/2025
+
 import os
 
 class Item:
@@ -8,7 +11,7 @@ class Item:
         self.price = price
 
     def __str__(self):
-        return f"ID: {self.item_id}, Name: {self.name}, Description: {self.description}, Price: ${self.price:.2f}"
+        return f"ID: {self.item_id} \nName: {self.name} \nDescription: {self.description} \nPrice: PHP{self.price:.2f}"
 
 class ItemCRUD:
     def __init__(self):
@@ -17,7 +20,10 @@ class ItemCRUD:
 
     def load_items(self):
         file_path = os.path.join(os.path.dirname(__file__), "items.txt")
-        if os.path.exists(file_path):
+        # Ensure the file exists
+        if not os.path.exists(file_path):
+            open(file_path, "w").close()  # Create an empty file if it doesn't exist
+        else:
             with open(file_path, "r") as file:
                 for line in file:
                     item_id, name, description, price = line.strip().split(",")
@@ -25,75 +31,149 @@ class ItemCRUD:
                     price = float(price)
                     item = Item(item_id, name, description, price)
                     self.items.append(item)
-
-    def create_item(self, item_id, name, description, price):
-        if not isinstance(item_id, int) or item_id <= 0:
-            raise ValueError("Item ID must be a positive integer.")
-        if any(item.item_id == item_id for item in self.items):
-            raise ValueError("Item ID already exists.")
-        if not name or not name.strip():
-            raise ValueError("Name cannot be empty or whitespace.")
-        if not description or not description.strip():
-            raise ValueError("Description cannot be empty or whitespace.")
-        if not isinstance(price, (int, float)) or price <= 0:
-            raise ValueError("Price must be a positive number.")
-        
-        item = Item(item_id, name.strip(), description.strip(), price)
-        self.items.append(item)
-        return item
+                    
+    def save_items(self):
+        file_path = os.path.join(os.path.dirname(__file__), "items.txt")
+        with open(file_path, "w") as file:
+            for item in self.items:
+                file.write(f"{item.item_id},{item.name},{item.description},{item.price:.2f}\n")
+    
+    def create_item(self):
+        while True:
+            try:
+                # Input and validate item_id
+                while True:
+                    try:
+                        item_id = int(input("Enter Item ID: "))
+                        if item_id <= 0:
+                            raise ValueError("Item ID must be a positive integer.")
+                        if any(item.item_id == item_id for item in self.items):
+                            raise ValueError("Item ID already exists.")
+                        break
+                    except ValueError as ve:
+                        print(f"Error: {ve}")
+    
+                # Input and validate name
+                while True:
+                    try:
+                        name = input("Enter Name: ").strip()
+                        if not name:
+                            raise ValueError("Name cannot be empty or whitespace.")
+                        break
+                    except ValueError as ve:
+                        print(f"Error: {ve}")
+    
+                # Input and validate description
+                while True:
+                    try:
+                        description = input("Enter Description: ").strip()
+                        if not description:
+                            raise ValueError("Description cannot be empty or whitespace.")
+                        break
+                    except ValueError as ve:
+                        print(f"Error: {ve}")
+    
+                # Input and validate price
+                while True:
+                    try:
+                        price = float(input("Enter Price: "))
+                        if price <= 0:
+                            raise ValueError("Price must be a positive number.")
+                        break
+                    except ValueError as ve:
+                        print(f"Error: {ve}")
+    
+                # Create and add the item
+                item = Item(item_id, name, description, price)
+                self.items.append(item)
+                self.save_items()
+                print(f"Item {item_id} created successfully.")
+                return
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}")
 
     def read_item(self, item_id):
-        for item in self.items:
-            if item.item_id == item_id:
-                return item
-        raise ValueError("Item not found.")
+        while True:
+            for item in self.items:
+                if item.item_id == item_id:
+                    return item
+            raise ValueError("Item not found.")
 
-    def update_item(self, item_id, name, description, price):
-        for item in self.items:
-            if item.item_id == item_id:
-                if name:
-                    item.name = name
-                if description:
-                    item.description = description
-                if price is not None:
-                    if price <= 0:
-                        raise ValueError("Price must be greater than zero.")
-                    item.price = price
-                print(f"Item {item_id} updated.")
-                return
-        raise ValueError("Item not found.")
+    def update_item(self, item_id):
+        while True:
+            try:
+                # Check if the item exists
+                for item in self.items:
+                    if item.item_id == item_id:
+                        print(f"Updating Item: {item}")
+                        
+                        # Prompt for new values
+                        while True:
+                            try:
+                                name = input("Enter Name: ").strip()
+                                if not name:
+                                    raise ValueError("Name cannot be empty or whitespace.")
+                                break
+                            except ValueError as ve:
+                                print(f"Error: {ve}")
+                        
+                        while True:
+                            try:
+                                description = input("Enter Description: ").strip()
+                                if not description:
+                                    raise ValueError("Description cannot be empty or whitespace.")
+                                break
+                            except ValueError as ve:
+                                print(f"Error: {ve}")
+                        
+                        while True:
+                            try:
+                                price = float(input("Enter Price: "))
+                                if price <= 0:
+                                    raise ValueError("Price must be a positive number.")
+                                break
+                            except ValueError as ve:
+                                print(f"Error: {ve}")
+                                
+                        self.save_items()
+                        print(f"Item {item_id} updated successfully.")
+                        return
+                
+                # If item not found
+                raise ValueError("Item not found.")
+            except ValueError as ve:
+                print(f"Error: {ve}")
+            except Exception as e:
+                print(f"An unexpected error occurred: {e}")
 
     def delete_item(self, item_id):
-        for item in self.items:
-            if item.item_id == item_id:
-                self.items.remove(item)
-                print(f"Item {item_id} deleted.")
-                return
-        raise ValueError("Item not found.")
+        while  True:
+            for item in self.items:
+                if item.item_id == item_id:
+                    self.items.remove(item)
+                    self.save_items()
+                    print(f"Item {item_id} deleted.")
+                    return
+            raise ValueError("Item not found.")
 
 def main_menu():
     manager = ItemCRUD()
     
     while True:
         print('\n**********************************************')
-        print("\tTEM MANAGEMENT APPLICATION")
+        print("\tITEM MANAGEMENT APPLICATION")
         print('**********************************************\n')
         print("[C] Create Item")
         print("[R] Read Item")
         print("[U] Update Item")
         print("[D] Delete Item")
-        print("[Q] Quit")
+        print("[Q] Quit\n")
         print('**********************************************\n')
         
         try:
             choice = input("Enter Choice: ")
             if choice.lower() == "c":
-                item_id = int(input("Enter Item ID: "))
-                name = input("Enter Name: ")
-                description = input("Enter Description: ")
-                price = float(input("Enter Price: "))
-                manager.create_item(item_id, name, description, price)
-                print("Item created.")
+                manager.create_item()
                 
             elif choice.lower() == "r":
                 item_id = int(input("Enter Item ID: "))
@@ -102,10 +182,7 @@ def main_menu():
                 
             elif choice.lower() == "u":
                 item_id = int(input("Enter Item ID: "))
-                name = input("Enter Name: ")
-                description = input("Enter Description: ")
-                price = float(input("Enter Price: "))
-                manager.update_item(item_id, name, description, price)
+                manager.update_item(item_id)
                 
             elif choice.lower() == "d":
                 item_id = int(input("Enter Item ID: "))
