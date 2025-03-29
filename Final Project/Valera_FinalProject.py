@@ -1,16 +1,36 @@
-import tkinter as tk
-from tkinter import messagebox
-import json
-import os
-import datetime
+#Author: Valera, Tamiyah Gale C.
+#Date: 29/03/2025
+#Description: Final Project for Python Programming
+# This program is a simple student registration system using Tkinter for GUI and JSON for data storage.
+# It allows users to sign up, view all students, and search for a student by last name.
 
-# File for data persistence
-DATA_FILE = "students.json"
+#Important Libraries
+import tkinter as tk #library used to create the GUI
+from tkinter import messagebox
+import json #json also known as JavaScript Object Notation used to store data in a structured format
+import os #library used to interact with the operating system
+import datetime #library used to work with dates and times
+
+# File for data persistence. This file will be used to store the student records in JSON format
+DATA_FILE = "students.json" 
+
 
 # Ensure the data file exists
 if not os.path.exists(DATA_FILE):
     with open(DATA_FILE, "w") as file:
         json.dump([], file)
+
+# Create a custom message box function that will pop up to display feedback messages to the user       
+def custom_messagebox(parent, title, message):
+    custom_box = tk.Toplevel(parent)
+    custom_box.title(title)
+    custom_box.configure(bg="black")
+    tk.Label(
+        custom_box, text=message, font=("Consolas", 10), fg="white", bg="black", wraplength=400
+    ).pack(padx=20, pady=20)
+    tk.Button(
+        custom_box, text="OK", command=custom_box.destroy, fg="white", bg="black"
+    ).pack(pady=10)
 
 # Load existing records
 def load_records():
@@ -26,19 +46,19 @@ def save_records(records):
         with open(DATA_FILE, "w") as file:
             json.dump(records, file, indent=4)
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to save records: {e}")
+        custom_messagebox(app.root,"Error", f"Failed to save records: {e}")
 
 # Main application class
 class TamiyahsPythonClassApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Tamiyah's Python Class")
+        self.root.title("Tamiyah's Python Class") # Title of the window
         self.records = load_records()
         
         # Set up the main window
-        self.root.configure(bg="black")
-        self.root.geometry("450x450")
-        self.root.resizable(True, True)
+        self.root.configure(bg="black") # Background color
+        self.root.geometry("450x450") #the size of the window
+        self.root.resizable(True, True) # Allow resizing
         
         # Configure grid weights for resizing
         self.root.grid_rowconfigure(0, weight=1)
@@ -54,7 +74,8 @@ class TamiyahsPythonClassApp:
         self.menu_frame.grid_rowconfigure(5, weight=1)
         self.menu_frame.grid_columnconfigure(0, weight=1)
         self.menu_frame.grid_columnconfigure(1, weight=1)
-
+        
+        #Title of the Main Menu
         tk.Label(
             self.menu_frame,
             text="Tamiyah's Python Class \nRegistration",
@@ -65,6 +86,7 @@ class TamiyahsPythonClassApp:
             height=2     # Height of the label
         ).grid(row=0, column=0, columnspan=1,padx=50, pady=10, sticky="ew")
         
+        #Button 1 - Sign Up Form
         tk.Button(
             self.menu_frame,
             text="Sign Up",
@@ -75,6 +97,7 @@ class TamiyahsPythonClassApp:
             bg="#1E90FF"    # Background color of the button
         ).grid(row=2, column=0, columnspan=2, pady=5, padx=120, sticky="ew")
         
+        #Button 2 - View All Students
         tk.Button(
             self.menu_frame,
             text="View All Students",
@@ -85,6 +108,7 @@ class TamiyahsPythonClassApp:
             bg="#32CD32"
         ).grid(row=3, column=0, columnspan=2, pady=5, padx=120, sticky="ew")
         
+        #Button 3 - Search a Student
         tk.Button(
             self.menu_frame,
             text="Search a Student",
@@ -95,6 +119,7 @@ class TamiyahsPythonClassApp:
             bg="#FFD700"
         ).grid(row=4, column=0, columnspan=2, pady=5, padx=120, sticky="ew")
         
+        #Button 4 - Exit
         tk.Button(
             self.menu_frame,
             text="Exit",
@@ -133,12 +158,12 @@ class TamiyahsPythonClassApp:
                 bg="black"
             ).grid(row=i + 1, column=0, padx=10, pady=22, sticky="w")
             
-            # Entry Widget
+            # Entry Widget or the area where users can input their answer in the field
             entry = tk.Entry(self.root, width=35, font=("Consolas", 10))
             entry.grid(row=i + 1, column=1, padx=15, pady=22, sticky="w")
             self.entries[field] = entry
         
-        # Gender Dropdown
+        # Gender Dropdown Label
         tk.Label(
             self.root,
             text="Gender",
@@ -194,18 +219,20 @@ class TamiyahsPythonClassApp:
                 "Gender": self.gender_var.get().strip()
             }
 
-            # Validate fields
+            # Validate to make sure that all the fields except for middle name is not empty
             if not student["First Name"] or not student["Last Name"] or not student["Birthday"] or student["Gender"] == "Select Gender":
                 raise ValueError("First Name, Last Name, Birthday, and Gender are required fields.")
-
+            
+            #If the validation is successful, the student record will be saved to the JSON file
             self.records.append(student)
             save_records(self.records)
-            messagebox.showinfo("Success", "Student record saved successfully!")
-            self.show_menu()
-        except ValueError as ve:
-            messagebox.showerror("Error", str(ve))
+            custom_messagebox(self.root,"Success", "Student record saved successfully!")
+            
+        # Handle specific exceptions and display custom error messages
+        except ValueError as ve: 
+            custom_messagebox(self.root,"Error", str(ve))
         except Exception as e:
-            messagebox.showerror("Error", f"An unexpected error occurred: {e}")
+            custom_messagebox(self.root,"Error", f"An unexpected error occurred: {e}")
 
     # View all students
     def view_all_students(self):
@@ -231,6 +258,7 @@ class TamiyahsPythonClassApp:
                 fg="White",
                 bg="black"
             ).grid(row=1, column=0, columnspan=2, padx=20, pady=20, sticky="ew")
+            
         else:
             # Sorting options
             sort_frame = tk.Frame(self.root, bg="black")
@@ -281,7 +309,7 @@ class TamiyahsPythonClassApp:
 
         # Start displaying students from row 0 in the student_frame
         for i, student in enumerate(students):
-            student_info = f"{student['First Name']} {student['Middle Name']} {student['Last Name']} - {student['Birthday']} - {student['Gender']}"
+            student_info = f" {student['Last Name']}, {student['First Name']} {student['Middle Name']} - {student['Birthday']} - {student['Gender']}"
             tk.Label(
                 student_frame,
                 text=student_info,
@@ -347,20 +375,9 @@ class TamiyahsPythonClassApp:
                 f"{student['First Name']} {student['Middle Name']} {student['Last Name']} - {student['Birthday']} - {student['Gender']}"
                 for student in results
             )
-            self.custom_messagebox("Search Results", result_text)
+            custom_messagebox(self.root,"Search Results", result_text)
         else:
-            self.custom_messagebox("Search Results", "No matching records found.")
-
-    def custom_messagebox(self, title, message):
-        custom_box = tk.Toplevel(self.root)
-        custom_box.title(title)
-        custom_box.configure(bg="black")
-        tk.Label(
-            custom_box, text=message, font=("Consolas", 10), fg="white", bg="black", wraplength=400
-        ).pack(padx=20, pady=20)
-        tk.Button(
-            custom_box, text="OK", command=custom_box.destroy, fg="white", bg="black"
-        ).pack(pady=10)
+            custom_messagebox(self.root, "Search Results", "No matching records found.")
 
     # Show main menu
     def show_menu(self):
