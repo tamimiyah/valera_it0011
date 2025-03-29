@@ -392,4 +392,5 @@ class TamiyahsPythonClassApp:
 if __name__ == "__main__":
     root = tk.Tk()
     app = TamiyahsPythonClassApp(root)
-    root.mainloop()
+    root.mainloop() #open the window and start the application
+# The code is complete and will run a simple student registration system with a GUI.
