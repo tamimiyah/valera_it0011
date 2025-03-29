@@ -368,7 +368,7 @@ class TamiyahsPythonClassApp:
     # Perform search
     def perform_search(self):
         query = self.search_entry.get().strip()
-        results = [student for student in self.records if student["Last Name"].lower() == query.lower()]
+        results = [student for student in self.records if student["Last Name"].lower() == query.lower()] # Case insensitive search but if there is a student with the same last name, they will be displayed in the search results
 
         if results:
             result_text = "\n".join(
