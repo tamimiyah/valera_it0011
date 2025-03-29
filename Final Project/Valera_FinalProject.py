@@ -6,7 +6,6 @@
 
 #Important Libraries
 import tkinter as tk #library used to create the GUI
-from tkinter import messagebox
 import json #json also known as JavaScript Object Notation used to store data in a structured format
 import os #library used to interact with the operating system
 import datetime #library used to work with dates and times
